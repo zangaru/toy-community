@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/header.html :: head}"></th:block>
+</head>
+<body>
+<th:block th:replace="~{fragments/header.html :: header(${category})}"></th:block>
+<div class="row">
+    <form class="offset-3 col-6 form-group" th:object="${boardAddFormDto}" th:method="post"
+          th:action="@{|/boards/${category}/add|}"  enctype="multipart/form-data">
+        <div>
+            <label th:for="title">제목 : </label>
+            <input type="text" th:field="*{title}" style="width: 50%">
+        </div>
+        <br/>
+
+        <div>
+            <label th:for="content">내용 : </label>
+            <textarea rows="10" style="width: 100%;" th:field="*{content}"/>
+        </div>
+        <br/>
+        <br/>
+        <div align="center">
+            <button class="btn post-btn" type="submit">등록</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
