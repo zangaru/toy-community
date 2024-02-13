@@ -20,7 +20,7 @@ public class Member {
     private String password; //비밀번호
     private String nickname; //닉네임
     private LocalDateTime createdAt; //가입일
-    private Integer receivedLikeCnt; //회원이 받은 좋아요 수
+    private Integer receivedLikeCnt; //회원이 받은 좋아요 수 (본인 포함)
 
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole; //권한
