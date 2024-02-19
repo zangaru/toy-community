@@ -3,16 +3,20 @@ package com.toy.community.service;
 import com.toy.community.domain.entity.Board;
 import com.toy.community.domain.entity.Member;
 import com.toy.community.domain.enums.BoardCategory;
+import com.toy.community.domain.enums.MemberRole;
 import com.toy.community.dto.BoardAddFormDto;
 import com.toy.community.dto.BoardDto;
 import com.toy.community.repository.BoardRepository;
 import com.toy.community.repository.MemberRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,19 +25,36 @@ public class BoardServiceImpl implements BoardService {
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
 
-
     @Override
-    public Page<Board> getBoardList(BoardCategory category) {
-        return null;
+    public Page<Board> getBoardList(BoardCategory category, PageRequest pageRequest, String searchType, String keyword) {
+        if(searchType != null && keyword != null) {
+            if (searchType.equals("title")) {
+                return boardRepository.findByCategoryAndTitleAndMemberMemberRoleNot(category, keyword, MemberRole.ADMIN, pageRequest);
+            } else {
+                return boardRepository.findByCategoryAndNicknameAndNotMemberRole(category, keyword, MemberRole.ADMIN, pageRequest);
+            }
+        }
+        return boardRepository.findByCategoryAndMemberMemberRoleNot(category, MemberRole.ADMIN, pageRequest);
+    }
+
+    public List<Board> getNotice(BoardCategory category) {
+        return boardRepository.findByCategoryAndMemberMemberRole(category, MemberRole.ADMIN);
     }
 
     @Override
     public BoardDto getBoard(Long boardId, String category) {
-        return null;
+        Optional<Board> optionalBoard = boardRepository.findById(boardId);
+
+        // boardId에 해당하는 게시글이 없거나 카테고리가 일치하지 않으면
+        if (optionalBoard.isEmpty() || !optionalBoard.get().getCategory().toString().equalsIgnoreCase(category)) {
+            return null;
+        }
+
+        return BoardDto.of(optionalBoard.get()); //board 객체를 dto로 변환
     }
 
     @Override
-    public Long addBoard(BoardAddFormDto formDto, BoardCategory category, String loginId) throws IOException {
+    public Long addBoard(BoardAddFormDto formDto, BoardCategory category, String loginId, Authentication auth) throws IOException {
         Member loginMember = memberRepository.findByLoginId(loginId)
                 .orElse(null);
 

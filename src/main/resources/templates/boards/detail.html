@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="~{fragments/header.html :: head}"></th:block>
+</head>
+<body>
+<th:block th:replace="~{fragments/header.html :: header(${category})}"></th:block>
+<div class="row">
+    <div class="offset-3 col-6">
+        <form class="form-group" th:object="${boardDto}" th:method="post"
+              th:action="|@{/boards/{category}/{boardId} (category = ${category}, boardId=${boardDto.id})}|" enctype="multipart/form-data">
+            <div style="float: right;" align="right">
+                <div th:text="'작성일 : ' + ${#temporals.format(boardDto.createdAt, 'yy/MM/dd HH:mm')}"></div>
+                <div th:text="'최근 수정일 : ' + ${#temporals.format(boardDto.lastModifiedAt, 'yy/MM/dd HH:mm')}"></div>
+                <br/>
+                <div>
+                    <div th:if="${likeCheck == false}" style="font-size: large">
+                        <button class="btn icon-btn" type="button"
+                                th:onclick="|location.href='@{/likes/add/{boardId} (boardId=${boardDto.id})}'|">
+                            <img class="small-img" src="/images/empty-heart.svg">
+                        </button>[[${boardDto.likeCnt}]]
+                    </div>
+                    <div th:unless="${likeCheck == false}" style="font-size: large">
+                        <button class="btn icon-btn" type="button"
+                                onclick="deleteLike()">
+                            <img class="small-img" src="/images/fill-heart.svg">
+                        </button>[[${boardDto.likeCnt}]]
+                    </div>
+                </div>
+            </div>
+            <div th:text="'작성자 : ' + *{memberNickname}" style="font-size: large"></div>
+            <br/>
+            <div>
+                <label th:for="title" style="font-size: large">제목 : </label>
+                <input type="text" th:field="*{title}" style="width: 50%" readonly>
+            </div>
+            <br/>
+            <div>
+                <label th:for="body" style="font-size: large">내용 : </label>
+                <textarea rows="10" style="width: 100%;" th:field="*{content}" readonly/>
+            </div>
+            <br/>
+            <br/>
+        </form>
+
+        <br/><hr/>
+        <br/>
+        <hr/>
+        <br/><br/>
+    </div>
+</div>
+</body>
+</html>
