@@ -13,7 +13,7 @@ import java.io.PrintWriter;
 public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.setContentType("text/html; utf-8");
+        response.setContentType("text/html; charset=UTF-8");
         PrintWriter pw = response.getWriter();
         pw.println("<script>alert('로그인한 사용자만 접근 가능합니다!'); location.href='/members/login';</script>");
         pw.flush();
