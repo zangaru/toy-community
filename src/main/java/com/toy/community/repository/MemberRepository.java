@@ -1,8 +1,8 @@
 package com.toy.community.repository;
 
+
 import com.toy.community.domain.entity.Member;
 import com.toy.community.domain.enums.MemberRole;
-import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
