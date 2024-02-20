@@ -2,8 +2,8 @@ package com.toy.community.controller;
 
 import com.toy.community.dto.MemberJoinFormDto;
 import com.toy.community.dto.MemberLoginFormDto;
-import com.toy.community.service.BoardService;
-import com.toy.community.service.MemberService;
+import com.toy.community.service.interfaces.BoardService;
+import com.toy.community.service.interfaces.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

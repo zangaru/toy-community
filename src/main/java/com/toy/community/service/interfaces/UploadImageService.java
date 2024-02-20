@@ -1,4 +1,4 @@
-package com.toy.community.service;
+package com.toy.community.service.interfaces;
 
 import com.toy.community.domain.entity.UploadImage;
 import org.springframework.core.io.UrlResource;

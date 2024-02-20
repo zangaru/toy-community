@@ -2,6 +2,7 @@ package com.toy.community.domain.entity;
 
 import com.toy.community.domain.BaseEntity;
 import com.toy.community.domain.enums.BoardCategory;
+import com.toy.community.dto.BoardDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,4 +38,10 @@ public class Board extends BaseEntity {
     @Setter
     @OneToOne(fetch = FetchType.LAZY)
     private UploadImage uploadImage;
+
+    //게시글 수정 메서드
+    public void update(BoardDto dto) {
+        this.title = dto.getTitle();
+        this.content = dto.getContent();
+    }
 }

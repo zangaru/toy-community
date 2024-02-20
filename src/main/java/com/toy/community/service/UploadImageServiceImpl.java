@@ -3,6 +3,7 @@ package com.toy.community.service;
 import com.toy.community.domain.entity.UploadImage;
 import com.toy.community.repository.BoardRepository;
 import com.toy.community.repository.UploadImageRepository;
+import com.toy.community.service.interfaces.UploadImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +50,6 @@ public class UploadImageServiceImpl implements UploadImageService {
 
     @Override
     public void deleteImage(UploadImage uploadImage) {
-
     }
 
     @Override

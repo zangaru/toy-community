@@ -2,7 +2,7 @@ package com.toy.community.service;
 
 import com.toy.community.dto.MemberJoinFormDto;
 import com.toy.community.repository.MemberRepository;
-import jakarta.transaction.Transactional;
+import com.toy.community.service.interfaces.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

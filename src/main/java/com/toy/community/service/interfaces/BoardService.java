@@ -1,4 +1,4 @@
-package com.toy.community.service;
+package com.toy.community.service.interfaces;
 
 import com.toy.community.domain.entity.Board;
 import com.toy.community.domain.enums.BoardCategory;
@@ -17,4 +17,5 @@ public interface BoardService {
     List<Board> getNotice(BoardCategory category);
     BoardDto getBoard(Long boardId, String category);
     Long addBoard(BoardAddFormDto formDto, BoardCategory category, String loginId, Authentication auth) throws IOException;
+    Long editBoard(Long boardId, String category, BoardDto dto) throws IOException;
 }

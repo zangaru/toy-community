@@ -9,6 +9,9 @@ import com.toy.community.dto.BoardAddFormDto;
 import com.toy.community.dto.BoardDto;
 import com.toy.community.repository.BoardRepository;
 import com.toy.community.repository.MemberRepository;
+import com.toy.community.service.interfaces.BoardService;
+import com.toy.community.service.interfaces.UploadImageService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,6 +58,7 @@ public class BoardServiceImpl implements BoardService {
         return BoardDto.of(optionalBoard.get()); //board 객체를 dto로 변환
     }
 
+    @Transactional
     @Override
     public Long addBoard(BoardAddFormDto formDto, BoardCategory category, String loginId, Authentication auth) throws IOException {
         Member loginMember = memberRepository.findByLoginId(loginId)
@@ -70,5 +74,30 @@ public class BoardServiceImpl implements BoardService {
         }
 
         return savedBoard.getId();
+    }
+
+    @Transactional
+    @Override
+    public Long editBoard(Long boardId, String category, BoardDto dto) throws IOException {
+        Optional<Board> optBoard = boardRepository.findById(boardId);
+
+        //id에 해당하는 게시글이 없거나 카테고리가 일치하지 않으면
+        if(optBoard.isEmpty() || !optBoard.get().getCategory().toString().equalsIgnoreCase(category)) {
+            return null;
+        }
+
+        Board board = optBoard.get();
+        //게시글에 이미지가 있었으면 삭제
+        if (board.getUploadImage() != null) {
+            board.setUploadImage(null);
+        }
+
+        UploadImage uploadImage = uploadImageService.saveImage(dto.getNewImage());
+        if(uploadImage != null) {
+            board.setUploadImage(uploadImage);
+        }
+        board.update(dto);
+
+        return board.getId();
     }
 }

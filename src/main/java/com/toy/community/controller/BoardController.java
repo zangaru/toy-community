@@ -6,7 +6,7 @@ import com.toy.community.domain.enums.BoardCategory;
 import com.toy.community.dto.BoardDto;
 import com.toy.community.dto.BoardSearchDto;
 import com.toy.community.repository.MemberRepository;
-import com.toy.community.service.BoardService;
+import com.toy.community.service.interfaces.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -97,7 +97,11 @@ public class BoardController {
 
     /*게시글 상세 페이지*/
     @GetMapping("/{category}/{boardId}")
-    public String boardDetailPage(@PathVariable String category, @PathVariable Long boardId, Model model) {
+    public String boardDetailPage(@PathVariable String category, @PathVariable Long boardId, Model model, Authentication auth) {
+
+        if (auth != null) {
+            model.addAttribute("loginMemberLoginId", auth.getName());
+        }
 
         BoardDto boardDto = boardService.getBoard(boardId, category);
 
@@ -110,5 +114,20 @@ public class BoardController {
         model.addAttribute("boardDto", boardDto);
 
         return "boards/detail";
+    }
+
+    @PostMapping("/{category}/{boardId}/edit")
+    public String boardEdit(@PathVariable String category, @PathVariable Long boardId,
+                            @ModelAttribute BoardDto dto, Model model) throws IOException {
+        Long editedBoardId = boardService.editBoard(boardId, category, dto);
+
+        if (editedBoardId == null) {
+            model.addAttribute("message", "해당 게시글이 존재하지 않습니다.");
+            model.addAttribute("nextUrl", "/boards/" + category);
+        } else {
+            model.addAttribute("message", editedBoardId + "번 글이 수정 되었습니다.");
+            model.addAttribute("nextUrl", "/boards/" + category + "/" + boardId);
+        }
+        return "printMessage";
     }
 }
