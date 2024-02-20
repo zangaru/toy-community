@@ -40,6 +40,16 @@
                 <textarea rows="10" style="width: 100%;" th:field="*{content}" readonly/>
             </div>
             <br/>
+            <div id="image-div2" hidden>
+                <label th:for="newImage">이미지 첨부 : </label>
+                <input type="file" th:field="*{newImage}" style="width: 50%">
+                <br/>
+            </div>
+            <div th:if="${boardDto.uploadImage != null}" id="image-div1">
+                이미지 : <a th:href="|/boards/images/download/${boardDto.id}|" th:text="${boardDto.uploadImage.originalFilename}" /> <br/>
+                <img th:src="|/upload-images/${boardDto.uploadImage.savedFilename}|"
+                     width="200px" height="200px" style="border-color: black; border-style: solid; border-width: thin;"/>
+            </div>
             <br/>
         </form>
 

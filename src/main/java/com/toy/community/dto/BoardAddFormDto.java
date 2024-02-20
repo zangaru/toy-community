@@ -2,6 +2,7 @@ package com.toy.community.dto;
 
 import com.toy.community.domain.entity.Board;
 import com.toy.community.domain.entity.Member;
+import com.toy.community.domain.entity.UploadImage;
 import com.toy.community.domain.enums.BoardCategory;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +18,7 @@ public class BoardAddFormDto {
     private String content;
     private MultipartFile uploadImage;
 
-    public Board toEntity(BoardCategory category, Member member) {
+    public Board toEntity(BoardCategory category, Member member, UploadImage uploadImage) {
         return Board.builder()
                 .member(member)
                 .category(category)
@@ -25,7 +26,9 @@ public class BoardAddFormDto {
                 .content(content)
                 .likeCnt(0)
                 .commentCnt(0)
+                .uploadImage(uploadImage)
                 .build();
     }
+
 
 }

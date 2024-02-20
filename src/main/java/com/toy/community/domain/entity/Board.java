@@ -34,6 +34,7 @@ public class Board extends BaseEntity {
     private List<Like> likes;
     private Integer likeCnt; //좋아요 수
 
+    @Setter
     @OneToOne(fetch = FetchType.LAZY)
     private UploadImage uploadImage;
 }

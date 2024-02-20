@@ -2,6 +2,7 @@ package com.toy.community.service;
 
 import com.toy.community.domain.entity.Board;
 import com.toy.community.domain.entity.Member;
+import com.toy.community.domain.entity.UploadImage;
 import com.toy.community.domain.enums.BoardCategory;
 import com.toy.community.domain.enums.MemberRole;
 import com.toy.community.dto.BoardAddFormDto;
@@ -24,6 +25,7 @@ public class BoardServiceImpl implements BoardService {
 
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
+    private final UploadImageService uploadImageService;
 
     @Override
     public Page<Board> getBoardList(BoardCategory category, PageRequest pageRequest, String searchType, String keyword) {
@@ -58,11 +60,14 @@ public class BoardServiceImpl implements BoardService {
         Member loginMember = memberRepository.findByLoginId(loginId)
                 .orElse(null);
 
-        if (loginMember == null) {
-            throw new IllegalArgumentException("해당하는 멤버가 존재하지 않습니다.");
-        }
 
-        Board savedBoard = boardRepository.save(formDto.toEntity(category, loginMember));
+        UploadImage uploadImage = uploadImageService.saveImage(formDto.getUploadImage());
+
+        Board savedBoard = boardRepository.save(formDto.toEntity(category, loginMember, uploadImage));
+
+        if(uploadImage != null) {
+            savedBoard.setUploadImage(uploadImage);
+        }
 
         return savedBoard.getId();
     }

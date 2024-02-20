@@ -18,5 +18,4 @@ public class UploadImage {
 
     @OneToOne(mappedBy = "uploadImage", fetch = FetchType.LAZY)
     private Board board;
-
 }
