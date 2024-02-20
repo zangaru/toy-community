@@ -18,4 +18,5 @@ public interface BoardService {
     BoardDto getBoard(Long boardId, String category);
     Long addBoard(BoardAddFormDto formDto, BoardCategory category, String loginId, Authentication auth) throws IOException;
     Long editBoard(Long boardId, String category, BoardDto dto) throws IOException;
+    Long deleteBoard(Long boardId, String category) throws IOException;
 }

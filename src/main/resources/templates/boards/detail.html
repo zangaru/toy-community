@@ -85,6 +85,13 @@
         }
     }
 
+    function clickDelete() {
+        if (confirm("해당 글을 삭제 하시겠습니까?") == true) {
+            location.href = "/boards/" + [[${category}]] + "/" + [[${boardDto.id}]] + "/delete";
+        }
+    }
+
+
     $("#newImage").on("change", (e) => {
 
         let f = e.target.files[0];

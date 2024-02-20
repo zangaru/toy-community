@@ -9,6 +9,6 @@ import java.io.IOException;
 
 public interface UploadImageService {
     UploadImage saveImage(MultipartFile multipartFile) throws IOException;
-    void deleteImage(UploadImage uploadImage);
+    void deleteImage(UploadImage uploadImage) throws IOException;
     ResponseEntity<UrlResource> downloadImage(Long boardId);
 }

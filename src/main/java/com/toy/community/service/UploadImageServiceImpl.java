@@ -4,6 +4,7 @@ import com.toy.community.domain.entity.UploadImage;
 import com.toy.community.repository.BoardRepository;
 import com.toy.community.repository.UploadImageRepository;
 import com.toy.community.service.interfaces.UploadImageService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
@@ -48,18 +51,21 @@ public class UploadImageServiceImpl implements UploadImageService {
 
     }
 
+    @Transactional
     @Override
-    public void deleteImage(UploadImage uploadImage) {
+    public void deleteImage(UploadImage uploadImage) throws IOException {
+        uploadImageRepository.delete(uploadImage);
+        Files.deleteIfExists(Paths.get(getFullPath(uploadImage.getSavedFilename())));
     }
 
-    @Override
-    public ResponseEntity<UrlResource> downloadImage(Long boardId) {
-        return null;
-    }
+        @Override
+        public ResponseEntity<UrlResource> downloadImage(Long boardId) {
+            return null;
+        }
 
-    // 파일 이름에서 확장자 추출하는 메서드
-    private String extractExt(String originalFilename) {
-        int pos = originalFilename.lastIndexOf(".");
-        return originalFilename.substring(pos + 1);
+        // 파일 이름에서 확장자 추출하는 메서드
+        private String extractExt(String originalFilename) {
+            int pos = originalFilename.lastIndexOf(".");
+            return originalFilename.substring(pos + 1);
     }
 }

@@ -100,4 +100,26 @@ public class BoardServiceImpl implements BoardService {
 
         return board.getId();
     }
+
+    @Transactional
+    @Override
+    public Long deleteBoard(Long boardId, String category) throws IOException {
+        Optional<Board> optBoard = boardRepository.findById(boardId);
+
+        //id에 해당하는 게시글이 없거나 카테고리가 일치하지 않으면 삭제 실패
+        if(optBoard.isEmpty() || !optBoard.get().getCategory().toString().equalsIgnoreCase(category)) {
+            return null;
+        }
+
+        Board board = optBoard.get();
+        UploadImage uploadImage = board.getUploadImage();
+
+        if (uploadImage != null) {
+            uploadImageService.deleteImage(uploadImage); // 이미지 삭제
+            board.setUploadImage(uploadImage);
+        }
+
+        boardRepository.deleteById(boardId);
+        return boardId;
+    }
 }

@@ -130,4 +130,15 @@ public class BoardController {
         }
         return "printMessage";
     }
+
+    @GetMapping("/{category}/{boardId}/delete")
+    public String boardDelete(@PathVariable String category, @PathVariable Long boardId, Model model) throws IOException {
+
+        Long deletedBoardId = boardService.deleteBoard(boardId, category);
+
+        model.addAttribute("message", deletedBoardId == null ? "해당 게시글이 존재하지 않습니다" : deletedBoardId + "번 글이 삭제되었습니다.");
+        model.addAttribute("nextUrl", "/boards/" + category);
+
+        return "printMessage";
+    }
 }
